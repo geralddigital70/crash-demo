@@ -1,0 +1,4 @@
+node_modules/
+crash.db
+.env
+.DS_Store
