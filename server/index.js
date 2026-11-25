@@ -9,7 +9,7 @@ const db = require('./db');
 const game = require('./gameEngine');
 
 const app = express();
-app.use(cors());
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 app.use('/auth', authRouter);
 app.get('/health', (_req, res) => res.json({ ok: true }));
