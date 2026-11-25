@@ -1,4 +1,8 @@
-const API = 'http://localhost:4000';
+// Change this:
+// const API = 'http://localhost:4000';
+
+// To this:
+const API = import.meta.env.DEV ? 'http://localhost:4000' : 'https://crash-demo-t9q3.onrender.com';
 
 export async function register(username, password) {
   const res = await fetch(`${API}/auth/register`, {
