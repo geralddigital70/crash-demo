@@ -12,6 +12,7 @@ export default function GameScreen({ auth, gameState, balance, setBalance }) {
   const [winMessage, setWinMessage] = useState('');
   const [countdown, setCountdown] = useState(10);
   const [isAutoBet, setIsAutoBet] = useState(false);
+  const [showFairness, setShowFairness] = useState(false);
   
   // NEW: Bet history state
   const [betHistory, setBetHistory] = useState([]);
@@ -315,6 +316,51 @@ export default function GameScreen({ auth, gameState, balance, setBalance }) {
         {error && <span className="text-red-400 text-sm font-bold">{error}</span>}
         {winMessage && <span className="text-[#22c55e] text-sm font-bold">{winMessage}</span>}
       </div>
+
+            {/* Provably Fair Button */}
+      <div className="text-center mt-4 mb-2">
+        <button 
+          onClick={() => setShowFairness(true)}
+          className="text-xs text-gray-500 hover:text-white underline transition"
+        >
+          Verify Fairness (Provably Fair)
+        </button>
+      </div>
+
+      {/* Fairness Modal */}
+      {showFairness && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
+          <div className="bg-[#171a21] border border-[#2a2f3a] rounded-2xl p-6 max-w-md w-full shadow-2xl relative">
+            <h2 className="text-xl font-bold text-white mb-4">Provably Fair</h2>
+            <p className="text-xs text-gray-400 mb-4">
+              GeraldX uses a cryptographic hash to generate crash points. We show you the hash before the round, and the seed after the round, so you can verify we didn't change the outcome.
+            </p>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="text-xs font-bold text-gray-500 uppercase">Server Seed Hash (Before)</label>
+                <div className="bg-[#0f1115] p-2 rounded text-xs break-all text-[#22c55e] font-mono mt-1">
+                  {gameState.serverSeedHash || 'Waiting for next round...'}
+                </div>
+              </div>
+              
+              <div>
+                <label className="text-xs font-bold text-gray-500 uppercase">Server Seed (After)</label>
+                <div className="bg-[#0f1115] p-2 rounded text-xs break-all text-yellow-500 font-mono mt-1">
+                  {gameState.serverSeed || 'Will be revealed when the round crashes'}
+                </div>
+              </div>
+            </div>
+
+            <button 
+              onClick={() => setShowFairness(false)}
+              className="mt-6 w-full bg-[#22c55e] text-black font-bold py-2 rounded-lg"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* NEW: My Bets History */}
       <MyBets bets={betHistory} />
