@@ -87,7 +87,9 @@ router.post('/forgot-password', async (req, res) => {
     .run(token, expires, user.id);
 
   // Create the reset URL (points to your frontend)
-  const resetUrl = `http://localhost:5173/reset-password?token=${token}`;
+      const resetUrl = process.env.NODE_ENV === 'production'
+    ? `https://crash-demo-kappa.vercel.app/reset-password?token=${token}` 
+    : `http://localhost:5173/reset-password?token=${token}`;
 
   // Send the email
     try {
