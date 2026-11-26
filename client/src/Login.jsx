@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { login, register } from './api';
+import { Link } from 'react-router-dom';
 
 export default function Login({ onAuth }) {
   const [mode, setMode] = useState('login');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -13,9 +15,13 @@ export default function Login({ onAuth }) {
     setError('');
     setLoading(true);
     try {
-      const fn = mode === 'login' ? login : register;
-      const data = await fn(username, password);
-      onAuth(data);
+      if (mode === 'login') {
+        const data = await login(username, password);
+        onAuth(data);
+      } else {
+        const data = await register(username, email, password); // <-- pass email here
+        onAuth(data);
+      }
     } catch (err) {
       setError(err.message);
     } finally {
@@ -60,6 +66,20 @@ export default function Login({ onAuth }) {
             onChange={(e) => setUsername(e.target.value)}
             required
           />
+
+             {mode === 'register' && (
+            <input
+              className="w-full bg-[#0f1115] border border-[#2a2f3a] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#22c55e]"
+              placeholder="Email address"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required={mode === 'register'}
+            />
+          )}
+
+
+
           <input
             className="w-full bg-[#0f1115] border border-[#2a2f3a] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#22c55e]"
             placeholder="Password (min 4 chars)"
@@ -80,6 +100,15 @@ export default function Login({ onAuth }) {
           >
             {loading ? 'Please wait…' : mode === 'login' ? 'Login' : 'Create account'}
           </button>
+
+                      {mode === 'login' && (
+            <div className="text-center mt-4">
+              <Link to="/forgot-password" className="text-xs text-gray-400 hover:text-[#22c55e] underline">
+                Forgot Password?
+              </Link>
+            </div>
+          )}
+
         </form>
       </div>
     </div>
