@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import HistoryBar from './HistoryBar';
 import { socket } from './socket';
 import MyBets from './MyBets';
+import { playWinSound, playCrashSound } from './sounds';
 
 export default function GameScreen({ auth, gameState, balance, setBalance }) {
   const [betAmount, setBetAmount] = useState(100);
@@ -37,6 +38,7 @@ export default function GameScreen({ auth, gameState, balance, setBalance }) {
     function onCashoutSuccess(data) {
       setHasBet(false);
       setBalance(data.balance);
+       playWinSound();
       
       if (data.auto) {
         setWinMessage(`AUTO CASHED OUT at ${data.multiplier}x! +${data.payout} KSH`);
@@ -63,6 +65,7 @@ export default function GameScreen({ auth, gameState, balance, setBalance }) {
       setError(data.error);
     }
     function onRoundCrash() {
+      playCrashSound();
       // NEW: Save losing bet before resetting
       setHasBet(prevHasBet => {
         if (prevHasBet) {

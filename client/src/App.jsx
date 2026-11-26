@@ -65,7 +65,7 @@ export default function App() {
       {/* Top Navigation */}
       <div className="max-w-4xl mx-auto flex items-center justify-between mb-6 bg-[#171a21] border border-[#2a2f3a] rounded-xl p-4">
         <div>
-          <h1 className="text-xl font-bold">Crash Demo</h1>
+          <h1 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#22c55e] to-[#10b981]">GeraldX</h1>
           <p className="text-xs text-gray-500">
             Logged in as <span className="text-[#22c55e]">{auth.username}</span>
           </p>
@@ -86,13 +86,18 @@ export default function App() {
         </div>
       </div>
 
-      {/* Main Game Area */}
+           {/* Main Game Area */}
       <GameScreen 
         auth={auth} 
         gameState={gameState} 
         balance={balance} 
         setBalance={setBalance} 
       />
+
+      {/* Footer */}
+      <div className="max-w-4xl mx-auto mt-12 pb-6 text-center text-xs text-gray-500">
+        <p>Built by <span className="text-[#22c55e] font-bold">Gerald</span></p>
+      </div>
     </div>
   );
 }

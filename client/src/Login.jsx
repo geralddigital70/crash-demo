@@ -26,7 +26,7 @@ export default function Login({ onAuth }) {
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-sm bg-[#171a21] rounded-2xl p-6 border border-[#2a2f3a]">
-        <h1 className="text-2xl font-bold mb-1 text-center">Crash Demo</h1>
+        <h1 className="text-2xl font-bold mb-1 text-center text-transparent bg-clip-text bg-gradient-to-r from-[#22c55e] to-[#10b981]">GeraldX</h1>
         <p className="text-xs text-gray-500 text-center mb-6">
           Virtual money only • Min bet 50 KSH
         </p>
