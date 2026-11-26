@@ -3,6 +3,7 @@ import HistoryBar from './HistoryBar';
 import { socket } from './socket';
 import MyBets from './MyBets';
 import { playWinSound, playCrashSound } from './sounds';
+import CrashChart from './CrashChart';
 
 export default function GameScreen({ auth, gameState, balance, setBalance }) {
   const [betAmount, setBetAmount] = useState(100);
@@ -172,8 +173,8 @@ export default function GameScreen({ auth, gameState, balance, setBalance }) {
   
   const liveCashoutAmount = (betAmount * gameState.multiplier).toFixed(2);
   const flightProgress = gameState.multiplier - 1;
-  const rocketLeft = Math.min(flightProgress * 10, 85); 
-  const rocketBottom = Math.min(flightProgress * 6, 75) - Math.pow(flightProgress, 2) * 0.5;
+  // const rocketLeft = Math.min(flightProgress * 10, 85); 
+  // const rocketBottom = Math.min(flightProgress * 6, 75) - Math.pow(flightProgress, 2) * 0.5;
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -182,6 +183,12 @@ export default function GameScreen({ auth, gameState, balance, setBalance }) {
       {/* Main Game Area */}
       <div className="relative bg-[#171a21] border border-[#2a2f3a] rounded-2xl h-96 flex flex-col items-center justify-center overflow-hidden mb-4 shadow-2xl">
         
+         <CrashChart 
+          multiplier={gameState.multiplier} 
+          isRunning={isRunning} 
+          isCrashed={isCrashed} 
+        />
+
         <div className="absolute top-4 text-xs font-bold tracking-widest uppercase text-gray-400 z-10">
           {isWaiting && (
             <span className="text-white animate-pulse">
@@ -192,21 +199,7 @@ export default function GameScreen({ auth, gameState, balance, setBalance }) {
           {isCrashed && <span className="text-red-500 text-lg">FLEW AWAY at {gameState.crashPoint}x</span>}
         </div>
 
-        {(isRunning || isCrashed) && (
-          <div 
-            className="absolute transition-all duration-100 ease-out text-6xl z-30"
-            style={{
-              left: `${rocketLeft}%`,
-              bottom: `${Math.max(rocketBottom, 5)}%`,
-              transform: isCrashed 
-                ? 'rotate(90deg) scale(0.5)' 
-                : `rotate(${-15 - flightProgress * 2}deg)`,
-              opacity: isCrashed ? 0 : 1,
-            }}
-          >
-            🚀
-          </div>
-        )}
+        
 
         <div
           className={`text-7xl font-black transition-all duration-100 z-10 ${
