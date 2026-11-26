@@ -18,13 +18,17 @@ export default function GameScreen({ auth, gameState, balance, setBalance }) {
   // NEW: Bet history state
   const [betHistory, setBetHistory] = useState([]);
 
-  // Load saved bets from localStorage on mount
+   // Load saved bets from localStorage on mount (unique per user)
   useEffect(() => {
-    const savedBets = localStorage.getItem('crash_bet_history');
-    if (savedBets) {
-      try { setBetHistory(JSON.parse(savedBets)); } catch {}
+    if (auth?.username) {
+      const savedBets = localStorage.getItem(`crash_bet_history_${auth.username}`);
+      if (savedBets) {
+        try { setBetHistory(JSON.parse(savedBets)); } catch {}
+      } else {
+        setBetHistory([]); // Clear if no history for this user
+      }
     }
-  }, []);
+  }, [auth]);
 
   // Listen for bet/cashout responses
   useEffect(() => {
@@ -59,7 +63,7 @@ export default function GameScreen({ auth, gameState, balance, setBalance }) {
       };
       setBetHistory(prev => {
         const updated = [newBet, ...prev].slice(0, 10);
-        localStorage.setItem('crash_bet_history', JSON.stringify(updated));
+                localStorage.setItem(`crash_bet_history_${auth.username}`, JSON.stringify(updated));
         return updated;
       });
     }
@@ -80,7 +84,7 @@ export default function GameScreen({ auth, gameState, balance, setBalance }) {
           };
           setBetHistory(prev => {
             const updated = [newBet, ...prev].slice(0, 10);
-            localStorage.setItem('crash_bet_history', JSON.stringify(updated));
+                       localStorage.setItem(`crash_bet_history_${auth.username}`, JSON.stringify(updated));
             return updated;
           });
         }
